@@ -77,3 +77,24 @@ def get_basic_info(pe):
         "entry_point_va": get_entry_point_va(pe),
         "number_of_sections": pe.FILE_HEADER.NumberOfSections
     }
+    
+def get_imports(pe):
+    imports = []
+
+    if not hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):
+        return imports
+
+    for entry in pe.DIRECTORY_ENTRY_IMPORT:
+        dll = entry.dll.decode(errors="ignore").lower()
+
+        for imp in entry.imports:
+            if imp.name:
+                func = imp.name.decode(errors="ignore").lower()
+                addr = imp.address
+                imports.append({
+                    "dll": dll,
+                    "function": func,
+                    "address": addr
+                })
+
+    return imports

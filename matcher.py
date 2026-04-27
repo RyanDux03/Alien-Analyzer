@@ -1,6 +1,6 @@
 # matcher.py
 
-from rules import SINGLE_INSTRUCTION_RULES, OPERAND_CONTAINS_RULES
+from rules import SINGLE_INSTRUCTION_RULES, OPERAND_CONTAINS_RULES, IMPORT_RULES
 
 
 def match_single_instruction_rules(instructions):
@@ -106,6 +106,23 @@ def match_peb_being_debugged(instructions):
 
     return findings
 
+def match_import_rules(imports):
+    findings = []
+
+    for imp in imports:
+        for rule in IMPORT_RULES:
+            if imp["function"] == rule["function"]:
+                findings.append({
+                    "address": imp["address"],
+                    "instruction": f"{imp['dll']}!{imp['function']}",
+                    "rule_name": rule["name"],
+                    "category": rule["category"],
+                    "severity": rule["severity"],
+                    "description": rule["description"]
+                })
+
+    return findings
+
 
 def match_all_rules(instructions):
     findings = []
@@ -113,6 +130,6 @@ def match_all_rules(instructions):
     findings.extend(match_single_instruction_rules(instructions))
     findings.extend(match_operand_rules(instructions))
     findings.extend(match_peb_being_debugged(instructions))
-
+    
     return findings
 
