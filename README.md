@@ -62,7 +62,8 @@ pip install -r requirements.txt
 ```
 
 ## Safety Notice
-This tool performs static analysis only and does not execute the input file.
+This tool performs static analysis only and does not execute the input file. This isn't to say that it should be used to analyze malware in a uncontained environment.
+
 
 ## Future Work
 * Expand rule set
